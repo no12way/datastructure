@@ -26,7 +26,8 @@ public class BinaryTree<Key extends Comparable,Value> {
      * @param value
      */
     public void put(Key key,Value value){
-        //个人理解,由于栈的结构,最后返回的节点一定是根节点
+        //最后一定返回根节点,如果没有元素,那么第一个元素就是根节点,如果有一个元素
+        //那么第二个元素创建完,返回,跳出方法时会返回根节点
         root = put(root,key,value);
     }
 
@@ -41,17 +42,18 @@ public class BinaryTree<Key extends Comparable,Value> {
         //找到合适的位置存放新节点
         if(x == null){
             N++;
+            //创建根节点
             return new Node(key,value,null,null);
         }
         int result = key.compareTo(x.key);
         //查找key,value对应节点位置
         if (result > 0){
             //假设数据在最后一个节点的左子树的位置,(x.left=)在创建节点的同时巧妙的把节点成为x的左子树
-            x.left = put(x.left,key,value);
-        }
-        if(result < 0 ){
-            //假设数据在最后一个节点的左子树的位置,(x.left=)在创建节点的同时巧妙的把节点成为x的右子树
             x.right = put(x.right,key,value);
+        }
+        else if(result < 0 ){
+            //假设数据在最后一个节点的左子树的位置,(x.left=)在创建节点的同时巧妙的把节点成为x的右子树
+            x.left = put(x.left,key,value);
         }
         //如果key的值和当前x节点相等,那么替换掉x节点的value
         else {
@@ -77,12 +79,12 @@ public class BinaryTree<Key extends Comparable,Value> {
         //查找x树的左子树
         if (result > 0){
             //return之前会执行方法
-            return get(x.left,key);
+            return get(x.right,key);
         }
         //查找x树的右子树
-        if(result < 0 ){
+        else if(result < 0 ){
             //return之前会执行方法
-            return get(x.right,key);
+            return get(x.left,key);
         }
         //恰好key的值和x节点的key相等
         else {
@@ -117,7 +119,7 @@ public class BinaryTree<Key extends Comparable,Value> {
             x.right = delete(x.right,key);
         }
         //查找节点在当前x节点的左边,继续查找树的左子树
-        if(result < 0){
+        else if(result < 0){
             x.left = delete(x.left,key);
         }
         //当找到key值对应的树的时候
@@ -139,23 +141,31 @@ public class BinaryTree<Key extends Comparable,Value> {
                 Node p = x.right;
                 //指针p1用于指向最小节点的上一个节点
                 Node p1 = x.right;
+                //此时已经找到替换的节点
                 while (p.left != null){
                     p = p.left;
                 }
-                //此时已经找到了替换的节点
-                Node exchange = p;
-                //我们这一步需要把指针p1移动到被删除节点的上一个节点
-                while (p1.left.left != null){
+                //把节点取出
+                Node min = new Node(p.key,p.value, null,p.right);
+                //我们这一步需要把指针p1移动到被删除节点的上一个节点(不包括x.right这个节点)
+                while (p1.left != null){
+                    if (p1.left.left == null){
+                        //将删除的元素滞空,等于删除元素
+                        p1.left = null;
+                    }
+                    //指针左移
                     p1 = p1.left;
                 }
-                //将删除的元素滞空,等于删除元素
-                p1.left = null;
+                //如果p1节点就是要被删除的节点(代表p1节点没有子节点)p1.left == null
+                while (p1.left == null){
+                x.right = null;
+                }
                 //把x节点替换为新节点
-                exchange.left = x.left;
-                exchange.right = x.right;
+                min.left = x.left;
+                min.right = x.right;
                 //因为上一层的x.left/x.left的作用,返回的节点自动被拼接在原来的位置
                 N--;
-                return exchange;
+                return min;
             }
         }
         return x;
