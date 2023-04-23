@@ -130,7 +130,7 @@ public class BinaryTree<Key extends Comparable,Value> {
                 return x.right;
         }
             //如果当前树的右子树不存在
-            if(x.right == null){
+            else if(x.right == null){
                 //直接返回他的左子树,他的左子树会被上一层的x.left或者x.right巧妙嫁接
                 return x.left;
             }
