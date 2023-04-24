@@ -1,5 +1,7 @@
 package tree;
 
+import queue.Queue;
+
 public class BinaryTree<Key extends Comparable,Value> {
     //根节点
     public Node root;
@@ -38,7 +40,7 @@ public class BinaryTree<Key extends Comparable,Value> {
      * @param value
      */
     //个人认为Node类型在递归中很好创建了新节点并把其安插成在旧树的左右树
-    public Node put(Node x,Key key,Value value){
+    private Node put(Node x,Key key,Value value){
         //找到合适的位置存放新节点
         if(x == null){
             N++;
@@ -70,7 +72,7 @@ public class BinaryTree<Key extends Comparable,Value> {
     public Value get(Key key){
         return get(root, key);
     }
-    public Value get(Node x, Key key){
+    private Value get(Node x, Key key){
         if (x == null){
             return null;
         }
@@ -108,7 +110,7 @@ public class BinaryTree<Key extends Comparable,Value> {
      * @param key
      * @return
      */
-    public Node delete(Node x,Key key){
+    private Node delete(Node x,Key key){
         //如果没有相匹配的树,返回空值,代表删除失败
         if(x == null){
             return null;
@@ -169,6 +171,67 @@ public class BinaryTree<Key extends Comparable,Value> {
             }
         }
         return x;
+    }
+
+    /**
+     * 寻找最小key值(最左叶子节点)
+     * @return
+     */
+    public Key min(){
+        return min(root).key;
+    }
+    private Node min(Node x){
+        if (x.left != null){
+            return min(x.left);
+        }
+        else {
+            return x;
+        }
+    }
+
+    /**
+     * 寻找最大的key值(最右叶子节点)
+     * @return
+     */
+    public Key max(){
+        return max(root).key;
+    }
+    private Node max(Node x){
+        if (x.left != null){
+            return max(x.right);
+        }
+        else {
+            return x;
+        }
+    }
+
+    /**
+     * 先序遍历,根左右
+     * @return
+     */
+    public Queue<Key> preScan(){
+        //创建队列keys,把遍历的元素依次放入队列
+        Queue<Key> keys = new Queue<>();
+        preScan(root,keys);
+        return keys;
+    }
+    //递归的实现
+    private void preScan(Node x , Queue<Key> key){
+        if (x == null){
+            return;
+        }
+        //把x节点的key放到队列中
+        key.add(x.key);
+        //递归遍历x节点的左子树
+        if(x.left != null){
+            preScan(x.left,key);
+        }
+        //递归遍历把x节点右子树
+        //并且把值存入key队列中
+        if (x.right != null){
+            preScan(x.right,key);
+        }
+
     }
 
 }
