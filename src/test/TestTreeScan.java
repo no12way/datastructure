@@ -16,7 +16,20 @@ public class TestTreeScan {
         tree.put("H", "8");
         tree.put("C", "3");
         Queue<String> stringQueue = tree.preScan();
+        System.out.println("先序遍历");
         for (Object o : stringQueue) {
+            System.out.print(o+" ");
+        }
+        System.out.println("=====================");
+        Queue<String> midScan = tree.midScan();
+        System.out.println("中序遍历");
+        for (Object o : midScan) {
+            System.out.print(o+" ");
+        }
+        Queue<String> lastScan = tree.lastScan();
+        System.out.println("=====================");
+        System.out.println("后续遍历");
+        for (Object o : lastScan) {
             System.out.print(o+" ");
         }
         System.out.println("=====================");
@@ -24,6 +37,8 @@ public class TestTreeScan {
         System.out.println(min);
         String max = tree.max();
         System.out.println(max);
+        System.out.println("深度=================================");
+        System.out.println(tree.getDepth());
 
     }
 }

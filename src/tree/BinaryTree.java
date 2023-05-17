@@ -2,6 +2,8 @@ package tree;
 
 import queue.Queue;
 
+import java.util.logging.XMLFormatter;
+
 public class BinaryTree<Key extends Comparable,Value> {
     //根节点
     public Node root;
@@ -231,7 +233,92 @@ public class BinaryTree<Key extends Comparable,Value> {
         if (x.right != null){
             preScan(x.right,key);
         }
-
     }
+
+    /**
+     * 中序遍历(左根右)(从小到大遍历)
+     * @return
+     */
+    public Queue<Key> midScan(){
+        Queue<Key> keys = new Queue<>();
+        midScan(root,keys);
+        return keys;
+    }
+    private void midScan(Node x,Queue<Key> keys){
+        //如果节点为空,那么结束
+        if(x == null){
+            return;
+        }
+        //先查找左子节点
+        if (x.left != null){
+            midScan(x.left,keys);
+        }
+        //把x节点的key存入keys队列
+        keys.add(x.key);
+        //查找右子节点
+        if(x.right != null){
+            midScan(x.right,keys);
+        }
+    }
+
+    /**
+     * 实现后续遍历(左右根)
+     * @return
+     */
+    public Queue<Key> lastScan(){
+        Queue<Key> keyQueue = new Queue<>();
+        lastScan(root,keyQueue);
+        return keyQueue;
+    }
+    private void lastScan(Node x, Queue<Key> keys){
+        //如果根节点空,那么不好处理,这里是处理根节点
+        if (x == null){
+            return;
+        }
+        //查看x节点的左子树,递归
+        if( x.left != null){
+            lastScan(x.left,keys);
+        }
+        //查看x节点的右子树,递归
+        if( x.right != null){
+            lastScan(x.right,keys);
+        }
+        //真正遍历节点的代码
+        keys.add(x.key);
+    }
+
+    /**
+     * 查看树的深度
+     * @return
+     */
+    public int getDepth(){
+        return getDepth(root);
+    }
+    private int getDepth(Node x){
+        //如果没有树,返回0
+        if(x == null){
+            return 0;
+        }
+        //左子树最大
+        int maxL = 0;
+        //右子树最大
+        int maxR = 0;
+        //x树的最大
+        int max = 0;
+
+        //先进行左子树查找
+        if(x.left != null){
+            maxL = getDepth(x.left);
+        }
+        //再进行右子树查找
+        if(x.right != null){
+            maxR = getDepth(x.right);
+        }
+
+        max = maxL > maxR ? maxL + 1: maxR + 1;
+        //返回max成为新的maxL或者maxR
+        return max;
+    }
+
 
 }
