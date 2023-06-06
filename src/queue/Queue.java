@@ -10,6 +10,8 @@ public class Queue<T> implements Iterable{
     public Node last;
     //计数器,用于返回队列中元素个数(不包含头节点)
     public int N;
+    float a = 100;
+    double aa = 100;
 
     //创建节点类
     public class Node{
