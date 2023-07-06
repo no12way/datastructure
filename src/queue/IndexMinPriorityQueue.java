@@ -155,8 +155,8 @@ public class IndexMinPriorityQueue<T extends Comparable<T>>{
         items[i] = null;
         N--;
         //堆调整
-        swim(num);
-        sink(num);
+        int swim = swim(num);
+        sink(swim);
         return t;
     }
 
@@ -169,18 +169,18 @@ public class IndexMinPriorityQueue<T extends Comparable<T>>{
         //修改items中的元素
         items[i] = t;
         int i1 = qp[i];
-        swim(i1);
-        sink(i1);
+        int swim = swim(i1);
+        sink(swim);
     }
     //上浮算法,让索引在一个正确的位置
-    public void swim(int k){
+    public int swim(int k){
         while (k>1){
             if (greater(k/2,k)){
                 exchange(k/2,k);
             }
             k = k/2;
         }
-
+        return k;
     }
 
     public void sink(int k){

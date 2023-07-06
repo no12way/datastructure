@@ -8,9 +8,10 @@ public class TestIndexPriQueue {
         queue.insert(0,"A");
         queue.insert(1,"C");
         queue.insert(2,"D");
-        queue.change(2,"B");
+
         queue.insert(3,"E");
         queue.insert(4,"G");
+        queue.change(4,"B");
 
         while (queue.getLength()!= 0){
             System.out.print(queue.delByIndex(queue.minIndex())+" ");
